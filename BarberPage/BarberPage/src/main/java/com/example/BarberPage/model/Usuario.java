@@ -1,47 +1,59 @@
 package com.example.BarberPage.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity 
+@Entity
 @Table(name = "usuarios")
 public class Usuario {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idNombre;
+    private Integer id;
 
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres")
+    @NotBlank(message = "El nombre completo es obligatorio")
+    @Size(max = 100, message = "El nombre completo debe tener un máximo de 100 caracteres")
     @Column(nullable = false, length = 100)
-    private String nombres;
+    private String nombreCompleto;
 
-    @NotBlank (message = "El Email Es obligatorio")
-    @Size(max = 100, message = "El Email debe tener un maximo de 100 caracteres")
+    @NotBlank(message = "El correo electrónico es obligatorio")
+    @Email(message = "Debe ser un correo electrónico válido")
+    @Size(max = 100, message = "El correo debe tener un máximo de 100 caracteres")
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @NotBlank (message = "El telefono es obligatorio.")
-    @Size (min = 9, max = 12, message = "El telefono debe tener minimo 9 caracteres y maximo 12")
-    @Column (nullable = false, length = 12)
+    @Size(max = 20, message = "El teléfono debe tener un máximo de 20 caracteres")
+    @Column(length = 20)
     private String telefono;
 
-    @NotBlank (message = "La contraseña es obligatoria")
-    @Size(min = 10 ,message = "La contraseña debe tener un minimo de 10 caracteres")
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Column(nullable = false)
     private String contrasena;
 
-    @Column(length = 20)
-    private String rol = "cliente";
-    
+    @ManyToOne
+    @JoinColumn(name = "rol_id", nullable = false)
+    private Rol rol;
+
+    @OneToMany(mappedBy = "usuario")
+    @ToString.Exclude
+    private List<Reserva> reservas;
 }

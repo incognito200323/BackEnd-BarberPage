@@ -23,7 +23,12 @@ public class DetalleReserva {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idDetalle;
+    private Integer id;
+
+    @NotNull(message = "El precio historial es obligatorio")
+    @Column(name = "precio_historial")
+    private Integer precioUnitario;
+
 
     @ManyToOne
     @JoinColumn(name = "id_reserva")
@@ -33,7 +38,4 @@ public class DetalleReserva {
     @JoinColumn(name = "id_servicio", nullable = false)
     private Servicio servicio;
     
-    @NotNull(message = "El precio historial es obligatorio")
-    @Column(name = "precio_historial")
-    private Integer precioHistorial;
 }
